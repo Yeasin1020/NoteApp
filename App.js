@@ -1,12 +1,39 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import Intro from './app/screens/Intro';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect, useState } from 'react';
+import NoteScreen from './app/screens/NoteScreen';
+
 
 export default function App() {
+  const [user, setUser] = useState({});
+  const findUser = async () => {
+    const result = await AsyncStorage.getItem('user');
+    console.log(result);
+    setUser(JSON.parse(result))
+  }
+
+  useEffect(()=> {
+     findUser();
+     // AsyncStorage.clear();
+  }, [])
+  if(!user?.name){
+    return  <Intro onFinish={findUser}></Intro>
+  }
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+   <>
+    
+      <View>
+   
+     <NoteScreen user={user}></NoteScreen>  
+  
+     
+      
+      
     </View>
+    
+    </>
   );
 }
 
