@@ -5,10 +5,11 @@ import SearchBar from '../components/SearchBtn/SearchBar'
 import colors from '../misc/colors'
 import NoteInputModal from '../components/NoteInputModal/NoteInputModal'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import EditNote from '../components/EditNote/EditNote'
 
 
 
-export default function NoteScreen({ user }) {
+export default function NoteScreen({ user, navigation }) {
 	const [greet, setGreet] = useState('')
 	const [modalVisible, setModalVisible] = useState(false);
 	const [notes, setNotes] = useState([]);
@@ -67,46 +68,53 @@ export default function NoteScreen({ user }) {
 		<>
 
 			<StatusBar backgroundColor='lightgreen'></StatusBar>
-
-
 			<ScrollView>
-				<View>
-					<View >
-						<View>
-							<Text style={styles.text}>{`Good ${greet} ${user.name}`}</Text>
-						</View>
-						{
-							notes.length ? <SearchBar></SearchBar> : null
-						}
-						
-						<FlatList
-							data={notes}
-							renderItem={({ item, index }) => {
-								return (
-									<View style={styles.card}>
-										<Pressable onPress={() => handleEditData(item)}>
-											<Text style={styles.title}>{index + 1}.{item.title} {item.id}</Text>
-											<Text style={styles.content}>{item.decs}</Text>
-										</Pressable>
-									</View>
-								);
-							}}
-						/>
-						<View>
+				<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+					<View>
+						<View >
+							<View>
+								<Text style={styles.text}>{`Good ${greet} ${user.name}`}</Text>
+							</View>
+							{
+								notes.length ? <SearchBar></SearchBar> : null
+							}
+							<FlatList
+								data={notes}
+								renderItem={({ item, index }) => {
+									return (
+										<View style={styles.card}>
+											<Pressable onPress={() => handleEditData(item)}>
+												<Text style={styles.title}>{index + 1}.{item.title}</Text>
+												<Text style={styles.content}>{item.decs}</Text>
+											</Pressable>
+										</View>
+									);
+								}}
+							/>
+							<View>
+							</View>
 						</View>
 					</View>
-				</View>
+				</TouchableWithoutFeedback>
 			</ScrollView>
 
 			<NoteInputModal
 				visible={modalVisible}
 				onClose={() => setModalVisible(false)}
 				onSubmit={handleOnSubmit}
+
+			/>
+
+			<EditNote
+				visible={modalVisible}
+				onClose={() => setModalVisible(false)}
+				onSubmit={handleOnSubmit}
 				editTitle={editTitle}
 				editDecs={editDecs}
+				
 			>
 
-			</NoteInputModal>
+			</EditNote>
 			<View style={styles.buttonField}>
 				<TouchableOpacity onPress={() => setModalVisible(true)} style={styles.button} >
 					<Text style={styles.buttonText}>+</Text>
@@ -122,7 +130,7 @@ const width = Dimensions.get('window').width - 10
 const styles = StyleSheet.create({
 	text: {
 		textAlign: 'center',
-		marginTop: 60,
+		marginTop: 10,
 		fontSize: 15,
 		fontWeight: 'bold'
 	},
@@ -151,7 +159,7 @@ const styles = StyleSheet.create({
 	buttonField: {
 		position: 'absolute',
 		marginLeft: 300,
-		marginTop: 700,
+		marginTop: 630,
 
 	},
 	card: {

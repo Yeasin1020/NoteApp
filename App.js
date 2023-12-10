@@ -4,7 +4,11 @@ import Intro from './app/screens/Intro';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 import NoteScreen from './app/screens/NoteScreen';
+import { createStackNavigator } from '@react-navigation/stack';
+import EditNote from './app/components/EditNote/EditNote';
+import { NavigationContainer } from '@react-navigation/native';
 
+const Stack = createStackNavigator()
 
 export default function App() {
   const [user, setUser] = useState({});
@@ -14,26 +18,26 @@ export default function App() {
     setUser(JSON.parse(result))
   }
 
-  useEffect(()=> {
-     findUser();
-     // AsyncStorage.clear();
+  useEffect(() => {
+    findUser();
+    // AsyncStorage.clear();
   }, [])
-  if(!user?.name){
-    return  <Intro onFinish={findUser}></Intro>
+  if (!user?.name) {
+    return <Intro onFinish={findUser}></Intro>
+  }
+
+  const renderNoteScreen = (props) => {
+    return <NoteScreen {...props} user={user}/>
   }
   return (
-   <>
     
-      <View>
-   
-     <NoteScreen user={user}></NoteScreen>  
-  
-     
-      
-      
-    </View>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen component={renderNoteScreen} name='NoteApp' />
+          <Stack.Screen component={EditNote} name='EditNote' />
+        </Stack.Navigator>
+      </NavigationContainer>
     
-    </>
   );
 }
 

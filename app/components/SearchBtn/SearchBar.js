@@ -27,20 +27,20 @@ export default function SearchBar({ user }) {
 
 	return (
 		<>
-			<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-				<View style={styles.container}>
-					<Animated.View style={{ width: animatedWidth }}>
-						<TextInput
-							style={styles.input}
-							placeholder="Search..."
-							value={searchText}
-							onChangeText={(text) => setSearchText(text)}
-							onFocus={handleFocus}
-							onBlur={handleBlur}
-						/>
-					</Animated.View>
-				</View>
-			</TouchableWithoutFeedback>
+
+			<View style={styles.container}>
+				<Animated.View style={{ width: animatedWidth }}>
+					<TextInput
+						style={styles.input}
+						placeholder="Search..."
+						value={searchText}
+						onChangeText={(text) => setSearchText(text)}
+						onFocus={handleFocus}
+						onBlur={handleBlur}
+					/>
+				</Animated.View>
+			</View>
+
 		</>
 	)
 }
